@@ -48,4 +48,16 @@ class LoginController extends Controller
             ], 500);
         }
     }
+
+    public function getAuthUser(Request $request)
+    {
+        $this->validate($request, [
+            'token' => 'required'
+        ]);
+
+        $user = JWTAuth::authenticate($request->token);
+
+        return response()->json(['user' => $user]);
+    }
+
 }
