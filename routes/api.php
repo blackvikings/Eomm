@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\ProductContoller;
+use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\LoginController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,3 +20,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('products', [ProductContoller::class, 'list']);
+Route::get('register', [RegisterController::class, 'register']);
+
+Route::post('login', [LoginController::class, 'login']);
+
+Route::group(['middleware' => 'auth.jwt'], function (){
+    Route::get('logout', [LoginController::class, 'logout']);
+});
+
