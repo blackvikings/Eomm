@@ -80,7 +80,7 @@ class RegisterController extends Controller
             ]);
         } else {
             $postArray = [
-                'name'      => $request->name,
+                'full_name'      => $request->name,
                 'phone'     => $request->phone,
 //                'password'  => bcrypt($request->password),
                 'api_token' => $this->apiToken
