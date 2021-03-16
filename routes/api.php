@@ -22,7 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('products', [ProductContoller::class, 'list']);
 Route::post('register', [RegisterController::class, 'register']);
 
-Route::post('login', [LoginController::class, 'login']);
+Route::post('login', [LoginController::class, 'loginApi']);
 
 Route::group(['middleware' => 'auth.jwt'], function (){
     Route::get('logout', [LoginController::class, 'logout']);

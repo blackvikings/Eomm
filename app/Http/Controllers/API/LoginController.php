@@ -10,8 +10,11 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    public function loginApi(Request $request)
     {
+        return response()->json([
+            'message' => "hello",
+        ]);
         $input = $request->only('phone');
         $jwt_token = null;
 
