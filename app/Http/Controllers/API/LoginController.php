@@ -18,7 +18,7 @@ class LoginController extends Controller
         $input = $request->only('phone');
         $jwt_token = null;
 
-        if(!$jwt_token = JWTAuth::attempt($input)){
+        if(!$token = auth('api')->attempt($input)){
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Mobile No.',
