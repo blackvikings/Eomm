@@ -61,6 +61,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'admin' => \App\Http\Middleware\VerifyUserType::class,
         'user' => \App\Http\Middleware\verifyUser::class,
-        'auth.jwt' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
+        'APIToken' => \App\Http\Middleware\APIToken::class,
     ];
 }
