@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\RegisterAuthRequest;
 use App\User;
+use Validator;
 
 class RegisterController extends Controller
 {
