@@ -36,24 +36,17 @@ class RegisterController extends Controller
             // Fetch User
             $user = User::where('phone',$request->phone)->first();
             if($user) {
-                // Verify the password
-//                if( password_verify($request->password, $user->password) ) {
-                    // Update Token
+
                     $postArray = ['api_token' => $this->apiToken];
                     $login = User::where('phone',$request->phone)->update($postArray);
 
                     if($login) {
                         return response()->json([
-                            'name'         => $user->name,
-                            'phone'        => $user->email,
+                            'name'         => $user->full_name,
+                            'phone'        => $user->phone,
                             'access_token' => $this->apiToken,
                         ]);
                     }
-//                } else {
-//                    return response()->json([
-//                        'message' => 'Invalid Password',
-//                    ]);
-//                }
             } else {
                 return response()->json([
                     'message' => 'User not found',
