@@ -23,9 +23,9 @@ class PrescriptionController extends Controller
         }
         $user = User::where('api_token', $request->token)->first();
 
-        return response()->json($user);
+//        return response()->json($user);
 
-        if(!empty($user)){
+        if($user != null){
             if ($files = $request->file('file')) {
                 $file = $request->file->store('public/prescription');
 
