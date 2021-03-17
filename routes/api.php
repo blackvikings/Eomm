@@ -29,6 +29,8 @@ Route::post('/register',[RegisterController::class, 'postRegister']);
 // Protected with APIToken Middleware
 Route::get('categories', [CategoryController::class, 'index']);
 
+Route::get('search', [ProductContoller::class, 'search']);
+
 Route::middleware('APIToken')->group(function () {
     // Logout
     Route::post('/logout',[RegisterController::class, 'postLogout']);
