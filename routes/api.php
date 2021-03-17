@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\ProductContoller;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\PrescriptionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,5 +32,6 @@ Route::get('categories', [CategoryController::class, 'index']);
 Route::middleware('APIToken')->group(function () {
     // Logout
     Route::post('/logout',[RegisterController::class, 'postLogout']);
+    Route::post('upload-prescription', [PrescriptionController::class, 'upload']);
 });
 
