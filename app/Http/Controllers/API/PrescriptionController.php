@@ -25,7 +25,7 @@ class PrescriptionController extends Controller
 
 //        return response()->json($user);
 
-        if($user != null){
+        if(isset($user->id)){
             if ($files = $request->file('file')) {
                 $file = $request->file->store('public/prescription');
 
@@ -41,10 +41,12 @@ class PrescriptionController extends Controller
                 ]);
             }
         }
+        else{
+            return response()->json([
+                "success" => false,
+                "message" => "File not uploaded",
+            ]);
+        }
 
-        return response()->json([
-            "success" => false,
-            "message" => "File not uploaded",
-        ]);
     }
 }
