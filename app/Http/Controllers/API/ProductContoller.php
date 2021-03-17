@@ -14,4 +14,9 @@ class ProductContoller extends Controller
         else
             return Product::where('category_id', $category)->get();
     }
+
+    public function product($id)
+    {
+        return Product::where('id', $id)->first();
+    }
 }

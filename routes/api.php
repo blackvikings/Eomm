@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('products/{category?}', [ProductContoller::class, 'list']);
+Route::get('product/{id}', [ProductContoller::class, 'product']);
 //Route::post('register', [RegisterController::class, 'register']);
 Route::post('/login',[RegisterController::class,'postLogin']);
 // Register
