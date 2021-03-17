@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Prescription;
@@ -21,6 +22,8 @@ class PrescriptionController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);
         }
         $user = User::where('api_token', $request->token)->first();
+
+        return response()->json($user);
 
         if(!empty($user)){
             if ($files = $request->file('file')) {
