@@ -97,6 +97,14 @@ class ProductContoller extends Controller
         if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 401);
         }
+        $user = User::where('api_token', $request->token)->first();
+        if($user == null)
+        {
+            return response()->json([
+                "success" => false,
+                "message" => "User token mismatch",
+            ]);
+        }
 
         $cart = new Cart;
         $cart->product_id = $request->product_id;
@@ -108,7 +116,7 @@ class ProductContoller extends Controller
             $cart->image = $file;
         }
 
-        $user = User::where('api_token', $request->token)->first();
+
         $cart->user_id =$user->id;
         $cart->save();
 
@@ -129,5 +137,27 @@ class ProductContoller extends Controller
 
     }
 
+    public function cartList($token)
+    {
+        $user = User::where('api_token', $token)->first();
+        if($user == null)
+        {
+            return response()->json([
+                "success" => false,
+                "message" => "User token mismatch",
+            ]);
+        }
+
+        $cart = Cart::where('user_id', $user->id)->get();
+        if ($cart == null)
+        {
+            return response()->json([
+                "success" => true,
+                "message" => "No products exists in cart.",
+            ]);
+        }
+
+        return $cart;
+    }
 
 }
