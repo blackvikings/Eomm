@@ -36,5 +36,6 @@ Route::middleware('APIToken')->group(function () {
     Route::post('/logout',[RegisterController::class, 'postLogout']);
     Route::post('upload-prescription', [PrescriptionController::class, 'upload']);
     Route::post('add-to-cart', [ProductContoller::class, 'addTocart']);
+    Route::delete('remove-from-cart/{id}', [ProductContoller::class, 'removeCart']);
 });
 

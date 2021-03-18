@@ -118,5 +118,16 @@ class ProductContoller extends Controller
         ]);
     }
 
+    public function removeCart($id)
+    {
+        Cart::where('id', $id)->delete();
+
+        return response()->json([
+            "success" => true,
+            "message" => "product successfully deleted from cart",
+        ]);
+
+    }
+
 
 }
