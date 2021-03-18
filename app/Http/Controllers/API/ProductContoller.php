@@ -27,13 +27,13 @@ class ProductContoller extends Controller
     {
         $category = '';
         $name = '';
-        return $r->all();
-        if($r->query("c")){
-            $category = $r->query("c");
+//        return $r->all();
+        if($r->c){
+            $category = $r->c;
         }
-        if($r->query("n"))
+        if($r->n)
         {
-            $name = $r->query("n");
+            $name = $r->n;
         }
         $res = Product::all();
         $cat = Category::all();
