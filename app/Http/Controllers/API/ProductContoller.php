@@ -47,7 +47,7 @@ class ProductContoller extends Controller
         }
         else if(isset($name)){
             $name = strtolower($name);
-            $sRes = DB::select( DB::raw("SELECT * FROM `products` WHERE LOWER(name) like `%{$name}%`" ) );
+            $sRes = DB::select( DB::raw("SELECT * FROM `products` WHERE LOWER(name) name like `%{$name}%`" ) );
             //dd("SELECT * FROM `products` WHERE lower(name) like '%$name%'" );
             // $a = 1;
         }
