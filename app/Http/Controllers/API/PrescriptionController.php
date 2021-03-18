@@ -23,10 +23,13 @@ class PrescriptionController extends Controller
         }
         $user = User::where('api_token', $request->token)->first();
 
-//        return response()->json($user);
-
         if(isset($user->id)){
             if ($files = $request->file('file')) {
+
+                if(!$request->hasFile('file')) {
+                    return response()->json(['upload_file_not_found'], 400);
+                }
+
                 $file = $request->file->store('public/uploads/prescription');
 
                 $prescription = new Prescription;
