@@ -35,11 +35,8 @@ class ProductContoller extends Controller
         }
         $res = Product::all();
         $cat = Category::all();
-         return response()->json([
-           'category'=> $category,
-           'name' => $name
-         ]);
-        if(isset($category) && isset($name)){
+
+        if(isset($category) && isset($name) && $name != "" && $category != ""){
             $name = strtolower($name);
 //            return "hello";
             $sRes = DB::select( DB::raw("SELECT * FROM `products` WHERE lower(name) like `%{$name}%` and `category_id` = '$category'" ) );
