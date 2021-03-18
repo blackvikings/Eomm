@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Product;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class ProductContoller extends Controller
 {
