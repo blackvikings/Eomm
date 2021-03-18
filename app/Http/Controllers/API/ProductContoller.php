@@ -149,7 +149,7 @@ class ProductContoller extends Controller
         }
 
         $cart = Cart::where('user_id', $user->id)->get();
-        if ($cart == null)
+        if ($cart == null || empty($cart))
         {
             return response()->json([
                 "success" => true,
