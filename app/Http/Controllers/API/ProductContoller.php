@@ -41,7 +41,8 @@ class ProductContoller extends Controller
         if(isset($category) && isset($name) && $name != "" && $category != ""){
             $name = strtolower($name);
 //            return "hello";
-            $sRes = DB::select( DB::raw("SELECT * FROM `products` WHERE LOWER(name) like `%{$name}%` and `category_id` = '$category'" ) );
+            $category = Category::where('name', $category)->pluck('id');
+            $sRes = DB::select( DB::raw("SELECT * FROM `products` WHERE LOWER(name) like '%{$name}%' and `category_id` = '$category'" ) );
             //dd("SELECT * FROM `products` WHERE lower(name) like '%$name%' and category_id = $category" );
             //$a = 0;
         }
