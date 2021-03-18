@@ -26,7 +26,7 @@ class PrescriptionController extends Controller
         if(isset($user->id)){
             if ($files = $request->file('image')) {
 
-                $file = $request->file->store('public/uploads/prescription');
+                $file = $request->image->store('public/uploads/prescription');
 
                 $prescription = new Prescription;
                 $prescription->title  = $file;
