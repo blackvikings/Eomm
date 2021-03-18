@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Cart;
 use App\Category;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Product;
@@ -80,4 +82,40 @@ class ProductContoller extends Controller
         ]);
 
     }
+
+    public function addTocart(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'product_id' => 'required',
+            'product_name' => 'required',
+            'price' => 'required',
+            'image' => 'required|mimes:jpeg,jpg,png|max:2048',
+            'token' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+
+        $cart = new Cart;
+        $cart->product_id = $request->product_id;
+        $cart->product_name = $request->product_name;
+        $cart->price = $request->price;
+
+        if ($files = $request->file('image')) {
+            $file = $request->image->store('public/uploads/cart');
+            $cart->image = $file;
+        }
+
+        $user = User::where('api_token', $request->token)->first();
+        $cart->user_id =$user->id;
+        $cart->save();
+
+        return response()->json([
+            "success" => true,
+            "message" => "product successfully added in cart",
+        ]);
+    }
+
+
 }
