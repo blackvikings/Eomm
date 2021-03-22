@@ -48,8 +48,16 @@ class RegisterController extends Controller
                         ]);
                     }
             } else {
+                $postArray = [
+                    'full_name'      => $request->name,
+                    'phone'     => $request->phone,
+                    'api_token' => $this->apiToken
+                ];
+                $user = User::insert($postArray);
                 return response()->json([
-                    'message' => 'User not found',
+                    'name'         => $request->name,
+                    'phone'        => $request->phone,
+                    'access_token' => $this->apiToken,
                 ]);
             }
         }
@@ -75,7 +83,6 @@ class RegisterController extends Controller
             $postArray = [
                 'full_name'      => $request->name,
                 'phone'     => $request->phone,
-//                'password'  => bcrypt($request->password),
                 'api_token' => $this->apiToken
             ];
             // $user = User::GetInsertId($postArray);
