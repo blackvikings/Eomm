@@ -16,7 +16,7 @@ class ProductContoller extends Controller
     public function list($category = null)
     {
         if($category == null)
-            return response()->json(['status' =>  400, 'products' => Product::all()]);
+            return response()->json(['status' =>  200, 'products' => Product::all()]);
         else
             return response()->json(['status' => 200, 'products' => Product::where('category_id', $category)->get()]);
     }
