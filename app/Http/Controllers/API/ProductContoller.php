@@ -16,14 +16,14 @@ class ProductContoller extends Controller
     public function list($category = null)
     {
         if($category == null)
-            return Product::all();
+            return response()->json(['status' =>  400, 'products' => Product::all()]);
         else
-            return Product::where('category_id', $category)->get();
+            return response()->json(['status' => 200, 'products' => Product::where('category_id', $category)->get()]);
     }
 
     public function product($id)
     {
-        return Product::where('id', $id)->first();
+        return response()->json(['status' => 200, 'product' => Product::where('id', $id)->first()]);
     }
 
     public function search(Request $r)
@@ -70,13 +70,9 @@ class ProductContoller extends Controller
         if(!isset($category)) {
             $category = -1;
         }
-        //dd($sRes);
-//        return view('store.search')
-//            ->with('products', $sRes)
-//            ->with("cat", $cat)
-//            ->with("a", $category);
 
         return response()->json([
+            'status' => 200,
             'products' => $sRes,
             'cat' => $cat,
             'a' => $category
@@ -101,6 +97,7 @@ class ProductContoller extends Controller
         if($user == null)
         {
             return response()->json([
+                'status' => 400,
                 "success" => false,
                 "message" => "User token mismatch",
             ]);
@@ -121,6 +118,7 @@ class ProductContoller extends Controller
         $cart->save();
 
         return response()->json([
+            "status" => 200,
             "success" => true,
             "message" => "product successfully added in cart",
         ]);
@@ -131,6 +129,7 @@ class ProductContoller extends Controller
         Cart::where('id', $id)->delete();
 
         return response()->json([
+            'status' => 200,
             "success" => true,
             "message" => "product successfully deleted from cart",
         ]);
@@ -143,6 +142,7 @@ class ProductContoller extends Controller
         if($user == null)
         {
             return response()->json([
+                'status' => 200,
                 "success" => false,
                 "message" => "User token mismatch",
             ]);
@@ -152,6 +152,7 @@ class ProductContoller extends Controller
         if ($cart == null || $cart->isEmpty())
         {
             return response()->json([
+                'status' => 400,
                 "success" => true,
                 "message" => "No products exists in cart.",
             ]);

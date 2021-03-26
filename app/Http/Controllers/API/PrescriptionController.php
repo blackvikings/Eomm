@@ -34,17 +34,19 @@ class PrescriptionController extends Controller
                 $prescription->save();
 
                 return response()->json([
+                    'status' => 200,
                     "success" => true,
                     "message" => "File successfully uploaded",
                     "file" => $file
                 ]);
             }
             else{
-                return response()->json(['upload_file_not_found'], 400);
+                return response()->json(['upload_file_not_found'=> 'File not found', 'status' => 400]);
             }
         }
         else{
             return response()->json([
+                'status' => 200,
                 "success" => false,
                 "message" => "File not uploaded",
             ]);

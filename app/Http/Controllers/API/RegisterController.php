@@ -55,6 +55,7 @@ class RegisterController extends Controller
                 ];
                 $user = User::insert($postArray);
                 return response()->json([
+                    'status' => 200,
                     'name'         => $request->name,
                     'phone'        => $request->phone,
                     'access_token' => $this->apiToken,
@@ -96,6 +97,7 @@ class RegisterController extends Controller
                 ]);
             } else {
                 return response()->json([
+                    'status' => 400,
                     'message' => 'Registration failed, please try again.',
                 ]);
             }
@@ -113,11 +115,13 @@ class RegisterController extends Controller
             $logout = User::where('id',$user->id)->update($postArray);
             if($logout) {
                 return response()->json([
+                    'status' => 200,
                     'message' => 'User Logged Out',
                 ]);
             }
         } else {
             return response()->json([
+                'status' => 400,
                 'message' => 'User not found',
             ]);
         }
