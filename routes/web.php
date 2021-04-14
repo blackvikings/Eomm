@@ -12,6 +12,9 @@
 */
 //Dashboard
 //login
+
+
+
 Route::get('admin', 'loginController@adminIndex')->name('admin.login');
 Route::post('admin', 'loginController@adminPosted');
 
