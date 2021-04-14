@@ -16,14 +16,14 @@ class ProductContoller extends Controller
     public function list($category = null)
     {
         if($category == null)
-            return response()->json(['status' =>  200, 'products' => Product::all()]);
+            return response()->json(['status' =>  200, "success" => true, 'products' => Product::all()]);
         else
-            return response()->json(['status' => 200, 'products' => Product::where('category_id', $category)->get()]);
+            return response()->json(['status' => 200, "success" => true, 'products' => Product::where('category_id', $category)->get()]);
     }
 
     public function product($id)
     {
-        return response()->json(['status' => 200, 'product' => Product::where('id', $id)->first()]);
+        return response()->json(['status' => 200, "success" => true, 'product' => Product::where('id', $id)->first()]);
     }
 
     public function search(Request $r)
@@ -72,6 +72,7 @@ class ProductContoller extends Controller
         }
 
         return response()->json([
+            "success" => true,
             'status' => 200,
             'products' => $sRes,
             'cat' => $cat,
@@ -84,9 +85,6 @@ class ProductContoller extends Controller
     {
         $validator = Validator::make($request->all(), [
             'product_id' => 'required',
-            'product_name' => 'required',
-            'price' => 'required',
-            'image' => 'required|mimes:jpeg,jpg,png|max:2048',
             'token' => 'required',
         ]);
 
@@ -105,13 +103,13 @@ class ProductContoller extends Controller
 
         $cart = new Cart;
         $cart->product_id = $request->product_id;
-        $cart->product_name = $request->product_name;
-        $cart->price = $request->price;
+        // $cart->product_name = $request->product_name;
+        // $cart->price = $request->price;
 
-        if ($files = $request->file('image')) {
-            $file = $request->image->store('public/uploads/cart');
-            $cart->image = $file;
-        }
+        // if ($files = $request->file('image')) {
+        //     $file = $request->image->store('public/uploads/cart');
+        //     $cart->image = $file;
+        // }
 
 
         $cart->user_id =$user->id;
@@ -159,6 +157,68 @@ class ProductContoller extends Controller
         }
 
         return $cart;
+    }
+
+    public function order(Request $request, $token)
+    {
+        $validator = Validator::make($request->all(), [
+            'product_id' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'zip' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+
+        $total_price = 0;
+        foreach ($request->product_id as $product_id)
+        {
+            $total_price = $total_price + DB::table('product_sale')->insert(['product_id' => $product_id, 'sale_id' => $sales->id]);
+        }
+
+        $user_id = User::where('api_token', $token)->first();
+        $sales= new sale();
+        $sales->user_id=$user_id;
+        $sales->order_status='Placed';
+        $sales->price=$total_price;
+        $sales->save();
+
+        $add=new Address();
+        $add->area=$request->address;
+        $add->city=$request->city;
+        $add->zip=$request->zip;
+        $add->save();
+        $user_id->address_id=$add->id;
+        $user_id->save();
+
+        return response()->json([
+                'status' => 200,
+                "success" => true,
+                "message" => "Order Placed successfully.",
+        ]);
+    }
+
+    public function history(Request $request, $token)
+    {
+        $res1= sale::where('user_id', $token)->with('products')->get();
+        dd($res1->all());
+        if(!$res1)
+        {
+            return response()->json([
+                'status' => 400,
+                "success" => true,
+                "message" => "No order placed.",
+            ]);
+        }
+
+
+
+        return response()->json([
+            'status' => 200,
+            "success" => true,
+        ]);
     }
 
 }

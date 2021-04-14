@@ -10,6 +10,6 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return response()->json(['status' => 200, 'category' => Category::all()]);
+        return response()->json(['success' => true,'status' => 200, 'category' => Category::all()]);
     }
 }

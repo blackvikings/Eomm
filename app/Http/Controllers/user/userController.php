@@ -217,7 +217,6 @@ class userController extends Controller
     public function deleteCartItem(Request $r)
     {
 
-
         $counter=0;
         $newtotalCart = explode(',',Session::get('cart'));
         //dd(Session::get('cart'));
@@ -388,7 +387,7 @@ class userController extends Controller
         $cart=[];
         $product=[];
         $id=[];
-        foreach($res1 as $r )
+        foreach($res1 as $r)
         {
              $totalCart = explode(',',$r->product_id);
              foreach($totalCart as $c)
