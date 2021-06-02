@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin_panel;
 
+use App\Imports\ProductImport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductVerifyRequest;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Product;
 use App\Category;
 use App\Composition;
+use Maatwebsite\Excel\Facades\Excel;
 
 class productsController extends Controller
 {
@@ -31,6 +33,12 @@ class productsController extends Controller
 
     }
 
+    public function import()
+    {
+        Excel::import(new ProductImport, request()->file('file'));
+
+        return back();
+    }
 
 
     public function store(ProductVerifyRequest $request)

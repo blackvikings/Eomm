@@ -33,6 +33,8 @@ Route::group(['middleware' => 'admin'], function(){
     Route::get('/admin_panel/products/create', 'admin_panel\productsController@create')->name('admin.products.create');
     Route::post('/admin_panel/products/create', 'admin_panel\productsController@store');
 
+    Route::post('/admin_panel/products/import', 'admin_panel\productsController@import')->name('import');
+
     Route::get('/admin_panel/products/edit/{id}', 'admin_panel\productsController@edit')->name('admin.products.edit');
     Route::post('/admin_panel/products/edit/{id}', 'admin_panel\productsController@update');
 

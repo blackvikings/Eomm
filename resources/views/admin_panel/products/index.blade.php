@@ -6,6 +6,21 @@
                 <div class="card-body">
                     <h4 class="card-title">Products Table <a class="btn btn-lg btn-success" style="float:right;color:white" href="{{route('admin.products.create')}}">+ Add Product</a></h4>
                     <br><br>
+                    <div class="row">
+                        <div class="col-4">
+                            <form action="{{ route('import') }}" method="POST" enctype="multipart/form-data">
+                                {{ csrf_field() }}
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="file" name="file" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-success">Import Bulk Data</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -52,7 +67,7 @@
                                         {{$prd->description}}
                                     </td>
                                     <td>
-                                        {{$prd->category->name}}
+                                        @if(isset($prd->category->name) && !empty($prd->category->name)) {{ $prd->category->name }} @endif
                                     </td>
 
                                     <td><a href="{{route('admin.products.edit', ['id' => $prd->id])}}" class="btn btn-warning">Edit</a> </td>

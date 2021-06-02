@@ -19,7 +19,8 @@ class Product extends Model
         'price',
         'discount',
         'tag',
-        'category_id'
+        'category_id',
+        'unit'
     ];
 
     public function category()

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2021 at 01:42 PM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 7.4.19
+-- Generation Time: Jun 02, 2021 at 05:26 PM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -232,7 +232,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (19, '2021_05_29_104331_add_cmposition_id_in_products_table', 13),
 (20, '2021_05_29_162734_add_coloums_in_carts_table', 14),
 (21, '2021_04_14_115113_create_product_sale', 15),
-(22, '2021_05_29_190402_create_sale_details_table', 16);
+(22, '2021_05_29_190402_create_sale_details_table', 16),
+(23, '2021_06_02_133414_changing_in_products_table', 17);
 
 -- --------------------------------------------------------
 
@@ -285,12 +286,13 @@ CREATE TABLE `products` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image_name` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `colors` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` int(11) NOT NULL,
-  `discount` int(11) NOT NULL,
+  `discount` int(11) DEFAULT NULL,
   `tag` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `category_id` int(10) UNSIGNED NOT NULL,
+  `units` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `category_id` int(10) UNSIGNED DEFAULT NULL,
   `composition_id` int(10) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -300,9 +302,27 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `image_name`, `description`, `colors`, `price`, `discount`, `tag`, `category_id`, `composition_id`, `created_at`, `updated_at`) VALUES
-(7, 'hello world 2', 'uploads/products/7/1.jpg', 'dxfcvdfvb dfvbcdv bcv sdfvbcv xcdfbcxv bxcv dfvxcvxcv  xcvxcdfvsdvcvffbfgnb', '#ce3636', 560, 200, 'fbgbg vcfdcnbvcfgbcvgdrxcfb', 2, 1, '2021-05-31 06:07:45', '2021-05-31 06:07:46'),
-(8, 'hello world 3', 'uploads/products/8/1.jpg', 'cflihjjgifldhgkjb gvejhdfbjhdbjhfvbjhsdbfjhykbvjkndbkjvbjshdvbfhj', NULL, 25, 78, NULL, 1, 1, '2021-05-31 06:25:17', '2021-05-31 06:25:17');
+INSERT INTO `products` (`id`, `name`, `image_name`, `description`, `colors`, `price`, `discount`, `tag`, `units`, `category_id`, `composition_id`, `created_at`, `updated_at`) VALUES
+(7, 'hello world 2', 'uploads/products/7/1.jpg', 'dxfcvdfvb dfvbcdv bcv sdfvbcv xcdfbcxv bxcv dfvxcvxcv  xcvxcdfvsdvcvffbfgnb', '#ce3636', 560, 200, 'fbgbg vcfdcnbvcfgbcvgdrxcfb', NULL, 2, 1, '2021-05-31 06:07:45', '2021-05-31 06:07:46'),
+(8, 'hello world 3', 'uploads/products/8/1.jpg', 'cflihjjgifldhgkjb gvejhdfbjhdbjhfvbjhsdbfjhykbvjkndbkjvbjshdvbfhj', NULL, 25, 78, NULL, NULL, 1, 1, '2021-05-31 06:25:17', '2021-05-31 06:25:17'),
+(9, '2 SOME TAB 10', NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:48', '2021-06-02 09:51:48'),
+(10, '3G GEL 200ML', NULL, NULL, NULL, 20, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:48', '2021-06-02 09:51:48'),
+(11, '3 LAX SYP 100ML', NULL, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:48', '2021-06-02 09:51:48'),
+(12, '3 LAX SYP 200ML', NULL, NULL, NULL, 80, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(13, '3M ELASTIC ADHESIVE BANDAGE 10CM', NULL, NULL, NULL, 82, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(14, '3 MIX CREAM 7.5GM', NULL, NULL, NULL, 120, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(15, '3-NITE VAGINAL CAP 3', NULL, NULL, NULL, 750, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(16, '3-VC VAGINAL CAP 3', NULL, NULL, NULL, 79, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(17, '3-WAY STOPCOCK 1', NULL, NULL, NULL, 108, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(18, '4D TAB 1', NULL, NULL, NULL, 94, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(19, '4K PEG 105GM', NULL, NULL, NULL, 90, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(20, '4 QUIN D DROP 1', NULL, NULL, NULL, 12, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(21, '4 QUIN-DX EYE DROPS 5ML', NULL, NULL, NULL, 220, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(22, '4 QUIN EYE DROPS 5ML', NULL, NULL, NULL, 69, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(23, '4 QUIN EYE OINT 5GM', NULL, NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(24, '4-QUIN KT E/DROPS 5ML', NULL, NULL, NULL, 152, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(25, '4-QUIN LOT E/D 5ML', NULL, NULL, NULL, 86, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49'),
+(26, '50 FIT CAP 10', NULL, NULL, NULL, 68, NULL, NULL, NULL, NULL, NULL, '2021-06-02 09:51:49', '2021-06-02 09:51:49');
 
 -- --------------------------------------------------------
 
@@ -556,7 +576,7 @@ ALTER TABLE `medicine_requests`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -574,7 +594,7 @@ ALTER TABLE `prescriptions`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `product_sale`
