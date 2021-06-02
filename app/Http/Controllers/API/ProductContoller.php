@@ -8,8 +8,12 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Product;
+use App\sale;
 use Illuminate\Support\Facades\DB;
 use Validator;
+use App\Address;
+use App\SaleDetail;
+use App\ProductSale;
 
 class ProductContoller extends Controller
 {
@@ -31,53 +35,57 @@ class ProductContoller extends Controller
         $category = '';
         $name = '';
 //        return $r->all();
-        if($r->c){
-            $category = $r->c;
+        if($r->search){
+            $category = $r->search;
         }
-        if($r->n)
+        if($r->search)
         {
-            $name = $r->n;
+            $name = $r->search;
         }
         $res = Product::all();
-        $cat = Category::all();
+        // $cat = Category::all();
 
         if(isset($category) && isset($name) && $name != "" && $category != ""){
             $name = strtolower($name);
-//            return "hello";
-            $category = Category::where('name', $category)->pluck('id');
-            $sRes = DB::select( DB::raw("SELECT * FROM `products` WHERE LOWER(name) like '%{$name}%' and `category_id` = '$category'" ) );
-            //dd("SELECT * FROM `products` WHERE lower(name) like '%$name%' and category_id = $category" );
-            //$a = 0;
+            $cat = DB::select( DB::raw("SELECT * FROM `categories` WHERE LOWER(name) like '%{$name}%'" ) );
+            $sRes = DB::select( DB::raw("SELECT * FROM `products` WHERE LOWER(name) like '%{$name}%'" ) );
+            
         }
-        else if(isset($name)){
+        else if(isset($name) && $name != '' && $name != null){
             $name = strtolower($name);
             $sRes = DB::select( DB::raw("SELECT * FROM `products` WHERE LOWER(name) like '%{$name}%'" ) );
-            //dd("SELECT * FROM `products` WHERE lower(name) like '%$name%'" );
-            // $a = 1;
         }
-        else if(isset($category)){
+        else if(isset($category) && $name != '' && $name != null){
             $sRes = DB::table('products')
                 ->where("category_id" , $category)
                 ->get();
-            //$a = 2;
-        }
-        else{
-            $sRes = DB::table('products')
-                ->get();
-            // $a= 3;
         }
 
         if(!isset($category)) {
             $category = -1;
         }
 
-        return response()->json([
-            "success" => true,
-            'status' => 200,
-            'products' => $sRes,
-            'cat' => $cat,
-            'a' => $category
-        ]);
+
+        if(!isset($sRes))
+        {
+            return response()->json([
+                "success" => true,
+                'status' => 200,
+                'message' => 'No data found'
+            ]);  
+        }
+        else
+        {
+            return response()->json([
+                "success" => true,
+                'status' => 200,
+                'products' => $sRes,
+                'cat' => $cat,
+                'a' => $category
+            ]);
+        }
+
+        
 
     }
 
@@ -86,10 +94,11 @@ class ProductContoller extends Controller
         $validator = Validator::make($request->all(), [
             'product_id' => 'required',
             'token' => 'required',
+            'qty' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['message'=>$validator->errors()], 401);
         }
         $user = User::where('api_token', $request->token)->first();
         if($user == null)
@@ -103,15 +112,7 @@ class ProductContoller extends Controller
 
         $cart = new Cart;
         $cart->product_id = $request->product_id;
-        // $cart->product_name = $request->product_name;
-        // $cart->price = $request->price;
-
-        // if ($files = $request->file('image')) {
-        //     $file = $request->image->store('public/uploads/cart');
-        //     $cart->image = $file;
-        // }
-
-
+        $cart->qty = $request->qty; 
         $cart->user_id =$user->id;
         $cart->save();
 
@@ -122,9 +123,20 @@ class ProductContoller extends Controller
         ]);
     }
 
-    public function removeCart($id)
+    public function removeCart(Request $request)
     {
-        Cart::where('id', $id)->delete();
+        $validator = Validator::make($request->all(), [
+            'product_id' => 'required',
+            'token' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message'=>$validator->errors()], 401);
+        }
+        
+        $user = User::where('api_token', $request->token)->first();
+        
+        Cart::where('user_id', $user->id)->where('product_id', $request->product_id)->delete();
 
         return response()->json([
             'status' => 200,
@@ -146,52 +158,71 @@ class ProductContoller extends Controller
             ]);
         }
 
-        $cart = Cart::where('user_id', $user->id)->get();
+        $cart = Cart::where('user_id', $user->id)->with('products')->get();
         if ($cart == null || $cart->isEmpty())
         {
             return response()->json([
-                'status' => 400,
+                'status' => 200,
                 "success" => true,
                 "message" => "No products exists in cart.",
             ]);
         }
+        
+        $subTotal = 0;
+        foreach($cart as $cat)
+        {
+            $subTotal = $subTotal + $cat->products->price;   
+        }
 
-        return $cart;
+        return response()->json([
+                'status' => 200,
+                "success" => true,
+                "cart" => $cart,
+                "subtotal" => $subTotal
+            ]);
     }
 
     public function order(Request $request, $token)
     {
+        // return $request->all();
         $validator = Validator::make($request->all(), [
             'product_id' => 'required',
+            'qty' => 'required',
             'address' => 'required',
             'city' => 'required',
             'zip' => 'required'
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['message'=>$validator->errors()], 401);
         }
 
-        $total_price = 0;
-        foreach ($request->product_id as $product_id)
-        {
-            $total_price = $total_price + DB::table('product_sale')->insert(['product_id' => $product_id, 'sale_id' => $sales->id]);
-        }
-
+        
         $user_id = User::where('api_token', $token)->first();
         $sales= new sale();
-        $sales->user_id=$user_id;
+        $sales->user_id=$user_id->id;
         $sales->order_status='Placed';
-        $sales->price=$total_price;
         $sales->save();
-
-        $add=new Address();
-        $add->area=$request->address;
-        $add->city=$request->city;
-        $add->zip=$request->zip;
-        $add->save();
-        $user_id->address_id=$add->id;
-        $user_id->save();
+        foreach ($request->product_id as $product_id)
+        {
+            DB::table('product_sale')->insert(['product_id' => $product_id, 'sale_id' => $sales->id]);
+        }
+        
+        foreach($request->qty as $qty)
+        {
+            SaleDetail::create(['sale_id' => $sales->id, 'qty' => $qty]);
+        }
+        
+        if($user_id->address_id == null){
+            $add=new Address();
+            $add->area=$request->address;
+            $add->city=$request->city;
+            $add->zip=$request->zip;
+            $add->save();
+            $user_id->address_id=$add->id;
+            $user_id->save();
+        }
+        
 
         return response()->json([
                 'status' => 200,
@@ -200,10 +231,75 @@ class ProductContoller extends Controller
         ]);
     }
 
+
+    public function address($token)
+    {
+        $user = User::where('api_token', $token)->first();
+        $address = Address::where('id', $user->address_id)->first();
+        
+        return response()->json([
+            'status' => 200,
+            "success" => true,
+            "address" => $address
+        ]);
+    }
+
+
+    public function updateAddress(Request $request, $id)
+    {
+        // dd($request->toArray());
+        $validator = Validator::make($request->all(), [
+            'address' => 'required',
+            'city' => 'required',
+            'zip' => 'required'
+        ]);
+        
+         if ($validator->fails()) {
+            return response()->json(['error'=>$validator->errors()], 401);
+        }
+        
+        $address = Address::where('id', $id)->first();
+        $address->area=$request->address;
+        $address->city=$request->city;
+        $address->zip=$request->zip;
+        $address->save();
+        
+        return response()->json([
+            'status' => 200,
+            "success" => true,
+        ]);
+    }
+
     public function history(Request $request, $token)
     {
-        $res1= sale::where('user_id', $token)->with('products')->get();
-        dd($res1->all());
+        
+        
+        $user = User::where('api_token', $token)->first();
+        
+        $res1= sale::where('user_id', $user->id)->with('saledetails')->with(['user' => function($q){
+                $q->with('addresses');
+            }])->get();
+        
+        $product_ids = [];
+        
+        // dd($res1->toArray());
+        foreach($res1 as $sale)
+        {
+            $pd_id = ProductSale::where('sale_id', $sale->id)->get();   
+            // dd($pd_id->toArray());   
+            if(!$pd_id->isEmpty())
+            {
+                foreach($pd_id as $id)
+                {
+                    $product_ids[] =  $id->product_id;    
+                }
+                
+            }
+            
+        }
+         
+        $products = Product::whereIn('id', $product_ids)->get();
+        
         if(!$res1)
         {
             return response()->json([
@@ -213,11 +309,11 @@ class ProductContoller extends Controller
             ]);
         }
 
-
-
         return response()->json([
             'status' => 200,
             "success" => true,
+            "data" => $res1,
+            'products' => $products
         ]);
     }
 

@@ -28,18 +28,18 @@
                                     <th>
                                         Category
                                     </th>
-                                    
+
                                     <th>
                                         Update
                                     </th>
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>
                             @foreach($prdlist as $prd)
                                 <tr>
                                     <td>
-                                        <img src="../uploads/products/{{$prd->id}}/{{$prd->image_name}}" style="width:100px;height:100px;border-radius:10%;" alt="">
+                                        <img src="{{ asset($prd->image_name) }}" style="width:100px;height:100px;border-radius:10%;" alt="">
                                     </td>
                                     <td>
                                        <a href="{{route('admin.products.edit', ['id' => $prd->id])}}" class="btn btn-warning">{{$prd->name}}</a>
@@ -54,9 +54,9 @@
                                     <td>
                                         {{$prd->category->name}}
                                     </td>
-                                    
+
                                     <td><a href="{{route('admin.products.edit', ['id' => $prd->id])}}" class="btn btn-warning">Edit</a> </td>
-                                     
+
                                 </tr>
                             @endforeach
                             </tbody>

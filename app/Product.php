@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\sale;
 class Product extends Model
 {
     /**
@@ -30,7 +30,7 @@ class Product extends Model
 
     public function sales()
     {
-        return $this->belongsTo('App\sale', 'sale_id');
+        return $this->belongsToMany(sale::class, 'product_sale');
     }
 
 }

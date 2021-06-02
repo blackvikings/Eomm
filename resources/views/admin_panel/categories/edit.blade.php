@@ -18,7 +18,7 @@
                     <br><br>
                       <h4 class="card-title">Edit Category</h4>
                       <br>
-                      <form class="forms-sample" method="post"  id="cat_form">
+                      <form class="forms-sample" method="post"  id="cat_form" enctype="multipart/form-data">
                       {{csrf_field()}}
                         <div class="form-group">
                           <label for="exampleInputEmail1">Category Name</label>
@@ -28,6 +28,12 @@
                           <label for="exampleInputPassword1">Category Type</label>
                           <textarea type="textarea" class="form-control" id="Type" name="Type" >{{$category->type}}</textarea>
                         </div>
+                          <div class="form-group">
+                              <label for="exampleInputPassword1">Image</label>
+                              <input type="file" name="image"/>
+                          </div>
+                          <img src="{{ asset($category->images) }}">
+
                         <input  type="submit" name="updateButton"  class="btn btn-success mr-2" id="updateButton" value="UPDATE" />
                       </form>
                     </div>
@@ -38,11 +44,11 @@
             </div>
           </div>
         </div>
-    
-    
+
+
     <!--JQUERY Validation-->
 <script>
-	
+
 	$(document).ready(function() {
 		// validate the comment form when it is submitted
 		//$("#commentForm").validate();
@@ -52,18 +58,18 @@
 			rules: {
 				Name: "required",
 				Type: "required",
-				
-				
-				
+
+
+
 			},
 			messages: {
 				Name: "Category Name is Required",
 				Type: "Category Type is Required",
-                	
+
 			}
 		});
 
-		
+
 	});
 	</script>
 <!--/JQUERY Validation-->

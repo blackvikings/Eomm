@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Product;
 class sale extends Model
 {
     /**
@@ -14,6 +14,7 @@ class sale extends Model
     protected $fillable = [
         'user_id',
         'product_id',
+        'sale_id',
         'order_status',
         'price'
     ];
@@ -23,8 +24,13 @@ class sale extends Model
     	return $this->belongsTo('App\User','user_id');
     }
 
-     public function products()
+     public function product()
      {
-         return $this->belongsToMany('App\Product', 'product_sale');
+         return $this->belongsToMany(Product::class, 'product_sale');
+     }
+     
+     public function saledetails()
+     {
+         return $this->hasMany('App\SaleDetail', 'sale_id');
      }
 }

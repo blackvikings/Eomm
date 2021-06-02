@@ -10,99 +10,55 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>
-                                        Id
-                                    </th>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <th>
-                                        Adress
-                                    </th>
-                                    <th>
-                                        Product Name
-                                    </th>
-                                    <th>
-                                        Quantity
-                                    </th>
-                                    <th>
-                                        Color
-                                    </th>
-                                    <th>
-                                        Placed at
-                                    </th>
-                                    <th>
-                                        Status
-                                    </th>
-
-                                    <th>
-                                        Update
-                                    </th>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Placed at</th>
+                                    <th>Status</th>
+                                    <th>Update</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($sale as $s)
-                                
-                                @foreach($all as $c)
-                                        @if($c[0]==$s->id)
-                                        @foreach($products as $p)
-                                        @if($p)
-                                        @if( $c[1]==$p->id)
                                 <tr>
-                                <td>{{$s->id}}</td>
-                                    
-                                        @foreach($users as $u)
-                                            @if($u->id == $s->user_id)
-                                            <td>{{$u->full_name}}</td>
-                                            <td>{{$u->area}}, {{$u->city}}, {{$u->zip}} ,Bangladesh</td>
-                                            
-                                            @break
-                                            @endif
-                                        @endforeach
+                                <td>{{ $s->id }}</td>
+                                <td>{{ $s->user->full_name }}</td>
 
-                                   
+                                <td>{{ $s->user->addresses[0]->area }}, {{ $s->user->addresses[0]->city }}, {{ $s->user->addresses[0]->zip }} ,India</td>
+
                                     <td>
-                                       
-                                        {{$p->name}}
-                                       
+                                        @foreach($s->product as $product)
+                                            {{ $product->name }}<br><br>
+                                        @endforeach
                                     </td>
+
                                    <td>
-                                        {{$c[2]}}
+                                        @foreach($s->saledetails as $saledetails)
+                                            {{ $saledetails->qty }}<br><br>
+                                       @endforeach
                                     </td>
                                     <td>
-                                        <div style="height:25px;width:25px;margin:5px;display:inline-block;background-color: {{$c[3]}}"></div>
-                                    </td>
-                                    
-                                    <td>
-                                        {{$s->created_at}}
+                                        {{ $s->created_at }}
                                     </td>
                                     <td>
-                                    {{$s->order_status}}
+                                        {{ $s->order_status }}
                                     </td>
                                     <td>
-                                        <form method="post" style="display:inline-block">
+                                        <form method="post" action="{{ route('admin.orderUpdate') }}" style="display:inline-block">
                                             {{csrf_field()}}
                                             <input type="hidden" value="{{$s->id}}" name="orderId">
                                             <select name="stat">
                                                 @foreach($status as $x)
-                                                @if($s->order_status!=$x)
-                                                <option value="{{$x}}">{{$x}}</option>
-
-                                                @endif
-
+                                                    <option @if($s->order_status == $x[$loop->index]) selected @endif value="{{$x}}">{{$x}}</option>
                                                 @endforeach
                                             </select>
                                             <input type="submit" class="btn btn-sm btn-warning" value="Update">
                                         </form>
                                     </td>
-                                    @break
-                                    @endif
+                                    @endforeach
 
-                                    @endif
-                                    @endforeach
-                                    @endif
-                                    @endforeach
-                                    @endforeach
                                 </tr>
                             </tbody>
                         </table>

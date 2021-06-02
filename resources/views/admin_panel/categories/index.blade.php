@@ -16,7 +16,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Add Categories</h4>
-                    <form class="forms-sample" method="post" id="cat_form">
+                    <form class="forms-sample" method="post" id="cat_form" enctype="multipart/form-data">
                         {{csrf_field()}}
                         <div class="form-group row">
                             <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Name</label>
@@ -30,6 +30,13 @@
                                 <input type="text" class="form-control" name="Type" id="Type" placeholder="Enter Category Type">
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Image</label>
+                            <div class="col-sm-9">
+                                <input type="file" name="image"/>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn btn-success mr-2">Submit</button>
                     </form>
                     @if($errors->any())
@@ -110,25 +117,25 @@
 
 <!--JQUERY Validation-->
 <script>
-	
+
 	$(document).ready(function() {
-		
+
 		$("#cat_form").validate({
 			rules: {
 				Name: "required",
 				Type: "required",
-				
-				
-				
+
+
+
 			},
 			messages: {
 				Name: "Category Name is Required",
 				Type: "Category Type is Required",
-                	
+
 			}
 		});
 
-		
+
 	});
 	</script>
 <!--/JQUERY Validation-->

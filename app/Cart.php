@@ -13,4 +13,9 @@ class Cart extends Model
         'image',
         'user_id'
     ];
+    
+    public function products()
+    {
+        return $this->belongsTo('App\Product', 'product_id');
+    }
 }

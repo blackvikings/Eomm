@@ -27,10 +27,10 @@
         <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
                 <a class="navbar-brand brand-logo" href="{{route('admin.dashboard')}}">
-                    <div style="color: #007bff;">Electro</div>
+                    <div style="color: #007bff;">Calcutta Medicine</div>
                 </a>
                 <a class="navbar-brand brand-logo-mini" href="{{route('admin.dashboard')}}">
-                    <div style="color: #007bff;">Electro</div>
+                    <div style="color: #007bff;">Calcutta Medicine</div>
                 </a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center">
@@ -93,10 +93,40 @@
                             <span class="menu-title">Categories</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{Route::is('admin.categories') ? 'active' : ''}}">
                         <a class="nav-link" href="{{route('admin.orderManagement')}}">
                             <i class="menu-icon mdi mdi-content-paste"></i>
                             <span class="menu-title">Order Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{Route::is('admin.media') ? 'active' : ''}}">
+                        <a class="nav-link" href="{{route('admin.media')}}">
+                            <i class="menu-icon mdi mdi-content-paste"></i>
+                            <span class="menu-title">Slider Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{Route::is('admin.prescription') ? 'active' : ''}}">
+                        <a class="nav-link" href="{{route('admin.prescription')}}">
+                            <i class="menu-icon mdi mdi-content-paste"></i>
+                            <span class="menu-title">Prescription Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{Route::is('admin.composition') ? 'active' : ''}}">
+                        <a class="nav-link" href="{{route('admin.composition')}}">
+                            <i class="menu-icon mdi mdi-content-paste"></i>
+                            <span class="menu-title">Composition Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{Route::is('admin.medicine-request') ? 'active' : ''}}">
+                        <a class="nav-link" href="{{route('admin.medicine-request')}}">
+                            <i class="menu-icon mdi mdi-content-paste"></i>
+                            <span class="menu-title">Medicine Request</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{Route::is('admin.notifications') ? 'active' : ''}}">
+                        <a class="nav-link" href="{{route('admin.notifications')}}">
+                            <i class="menu-icon mdi mdi-content-paste"></i>
+                            <span class="menu-title">Notifications</span>
                         </a>
                     </li>
                 </ul>
@@ -104,10 +134,8 @@
             <!-- partial -->
             <div class="main-panel">
                 @yield('content')
-                <!-- content-wrapper ends -->
-                <!-- partial:partials/_footer.html -->
                 <footer class="footer">
-                   
+
                 </footer>
                 <!-- partial -->
             </div>
@@ -133,7 +161,7 @@
 
     <script src="{{asset('js/dashboard.js')}}"></script>
     <script src="{{asset('js/chart.js')}}"></script>
-    
+
     <!--    Jquery Validation-->
     <script src="{{asset('js/lib/jquery.js')}}"></script>
     <script src="{{asset('js/dist/jquery.validate.js')}}"></script>

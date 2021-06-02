@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Prescription;
 use App\User;
 use Validator;
+use Storage;
 
 class PrescriptionController extends Controller
 {
@@ -26,17 +27,22 @@ class PrescriptionController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['message'=>$validator->errors()], 401);
         }
         $user = User::where('api_token', $request->token)->first();
 
         if(isset($user->id)){
-            // if ($files = $request->file('image')) {
 
-                // $file = $request->image->store('public/uploads/prescription');
+                $image = $request->input('image');
+                preg_match("/data:image\/(.*?);/",$image,$image_extension);
+                $image = preg_replace('/data:image\/(.*?);base64,/','',$image);
+                $image = str_replace(' ', '+', $image);
+                $imageName = 'image_' . time() . '.' . $image_extension[1];
+
+                Storage::disk('public_uploads')->put($imageName,base64_decode($image));
 
                 $prescription = new Prescription;
-                $prescription->title = $request->image;
+                $prescription->title = 'uploads/prescription/'.$imageName;
                 $prescription->user_id = $user->id;
                 $prescription->name = $request->name;
                 $prescription->age = $request->age;
@@ -56,12 +62,8 @@ class PrescriptionController extends Controller
                     "email" => $request->email,
                     "gender" => $request->gender,
                     "mobile" => $request->mobile,
-                    "image" => $request->image 
+                    "image" => $request->image
                 ]);
-            // }
-            // else{
-                // return response()->json(['upload_file_not_found'=> 'File not found', 'status' => 400]);
-            // }
         }
         else{
             return response()->json([
