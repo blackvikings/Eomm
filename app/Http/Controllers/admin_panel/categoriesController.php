@@ -29,9 +29,11 @@ class categoriesController extends Controller
         $cat = new Category();
         $cat->name = $request->Name;
         $cat->type = $request->Type;
-        $imageName = time().'.'.$request->image->getClientOriginalExtension();
-        $request->image->move(public_path('uploads/categories'), $imageName);
-        $cat->images = 'uploads/categories/'.$imageName;
+        if($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->move(public_path('uploads/categories'), $imageName);
+            $cat->images = 'uploads/categories/' . $imageName;
+        }
         $cat->save();
 
         return redirect()->route('admin.categories');
@@ -56,9 +58,11 @@ class categoriesController extends Controller
         }
         $catToUpdate->name = $request->Name;
         $catToUpdate->type = $request->Type;
-        $imageName = time().'.'.$request->image->getClientOriginalExtension();
-        $request->image->move(public_path('uploads/categories'), $imageName);
-        $catToUpdate->images = 'uploads/categories/'.$imageName;
+        if($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->move(public_path('uploads/categories'), $imageName);
+            $catToUpdate->images = 'uploads/categories/' . $imageName;
+        }
         $catToUpdate->save();
 
         return redirect()->route('admin.categories');

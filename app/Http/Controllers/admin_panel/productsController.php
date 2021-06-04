@@ -13,6 +13,7 @@ use App\Product;
 use App\Category;
 use App\Composition;
 use Maatwebsite\Excel\Facades\Excel;
+use File;
 
 class productsController extends Controller
 {
@@ -166,9 +167,11 @@ class productsController extends Controller
 
         $temp_string2='uploads/products/'.$prdToUpdate->id;
         $file = $temp_string2.'/1'.$ext;
-
-            $prdToUpdate->image_name = $temp_string2.'/1'.$ext;
-            $prdToUpdate->save();
+        if(File::exists(public_path($file))){
+            File::delete($file);
+        }
+        $prdToUpdate->image_name = $temp_string2.'/1'.$ext;
+        $prdToUpdate->save();
          if (file_put_contents($file, $data)) {
             echo "<p>Image $i was saved as $file.</p>";
          } else {
@@ -226,7 +229,6 @@ class productsController extends Controller
     public function destroy(Request $request)
     {
 
-
         $prdToDelete = Product::find($request->id);
 
         //deleting image folder
@@ -253,13 +255,11 @@ class productsController extends Controller
         //deleting image folder done
 
 
-
-        $prdToDelete->delete();
+//        if(!$prdToDelete->isEmpty()){
+            $prdToDelete->delete();
+//        }
 
         return redirect()->route('admin.products');
-
-
-
 
     }
 

@@ -20,18 +20,18 @@
                                         <div class="form-group">
                                             <br><br>
                                             <label >Product Name</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1" name="Name" value="{{$product->name}}" disabled>
+                                            <input type="text" class="form-control" id="exampleInputEmail1" name="Name" @if($product->name != null) value="{{$product->name}}" @endif disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Product Description</label>
                                             <textarea type="textarea" class="form-control" name="Description" disabled>{{$product->description}}</textarea>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="exampleFormControlSelect1">Large select</label>
-                                            <select class="form-control form-control-md" id="exampleFormControlSelect1" name="Category" disabled>
-                                                <option>{{$product->category->name}}</option>
-                                            </select>
-                                        </div>
+{{--                                        <div class="form-group">--}}
+{{--                                            <label for="exampleFormControlSelect1">Large select</label>--}}
+{{--                                            <select class="form-control form-control-md" id="exampleFormControlSelect1" name="Category" disabled>--}}
+{{--                                                <option>@if($product->category->name != null) {{$product->category->name}} @endif</option>--}}
+{{--                                            </select>--}}
+{{--                                        </div>--}}
                                         <div class="form-group">
                                             <label >Product Price</label>
                                             <input type="text" class="form-control" name="Price" value="{{$product->price}}" disabled>
@@ -41,19 +41,6 @@
                                             <input type="text" class="form-control"  name="Discounted_Price" value="{{$product->discount}}" disabled>
                                         </div>
 
-{{--                                        <div class="form-group ">--}}
-{{--                                            <label >Product Colors</label>--}}
-{{--                                            <br>--}}
-{{--                                            <div id="colors" style="border:1px solid #eee">--}}
-{{--                                            </div>--}}
-{{--                                            <br>--}}
-{{--                                            <input type="text" class="form-control" id="color_list" name="Colors" value="{{$product->colors}}" hidden>--}}
-{{--                                        </div>--}}
-
-{{--                                        <div class="form-group">--}}
-{{--                                            <label >Product Tags</label>--}}
-{{--                                            <input type="text" class="form-control" id="exampleInputEmail1" name="Tags" value="{{$product->tag}}" disabled>--}}
-{{--                                        </div>--}}
                                         <input type="submit" name="saveButton" class="btn btn-danger mr-2" id="updateButton" value="Delete" />
                                     </form>
                                     @if($errors->any())

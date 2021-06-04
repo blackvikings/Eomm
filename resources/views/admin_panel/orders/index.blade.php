@@ -13,8 +13,9 @@
                                     <th>Id</th>
                                     <th>Name</th>
                                     <th>Address</th>
-                                    <th>Product Name</th>
-                                    <th>Quantity</th>
+                                    <th>Products Name</th>
+                                    <th>Quantities of product</th>
+                                    <th>Price</th>
                                     <th>Placed at</th>
                                     <th>Status</th>
                                     <th>Update</th>
@@ -38,6 +39,14 @@
                                         @foreach($s->saledetails as $saledetails)
                                             {{ $saledetails->qty }}<br><br>
                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($s->product as $product)
+                                            @php
+                                                $totalPrice =  $product->price - $product->discount;
+                                            @endphp
+                                                {{ $totalPrice }}<br><br>
+                                        @endforeach
                                     </td>
                                     <td>
                                         {{ $s->created_at }}
